@@ -1,7 +1,9 @@
-import json
-
 from fastapi import APIRouter, Path, Query, HTTPException, status
+
+# schemas
 from schemas.books import BaseBook, Book
+
+# models
 import routes.books.models as book_models
 
 router = APIRouter(prefix='/books', tags=['books'])
@@ -15,8 +17,9 @@ def get_books() -> list[Book]:
     books = book_models.get_all_books()
 
     if not books:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     return books
 
@@ -29,8 +32,9 @@ def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query
     books = book_models.get_all_books()
 
     if not books:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     coincidences: list[Book] = []
 
@@ -38,7 +42,7 @@ def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query
         if title.lower() in str(book.title).lower():
             coincidences.append(Book(**book.model_dump()))
 
-    # filter by page & per page
+    # filter by page and per page
     limit = page * per_page
     offset = limit - per_page
 
@@ -53,8 +57,9 @@ def get_book_by_id(id: int = Path()) -> Book:
     books = book_models.get_all_books()
 
     if not books:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     # search book by id
     for book in books:
@@ -73,8 +78,9 @@ def create_book(book: BaseBook) -> Book:
     books = book_models.get_all_books()
 
     if not books:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     created_book = None
 
@@ -100,15 +106,17 @@ def update_book_by_id(book: BaseBook, id: int = Path()):
     book_by_id = book_models.get_book_by_id(id)
 
     if not book_by_id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={
-            'message': 'Book not found'})
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={'message': 'Book not found'})
 
     # get books from database
     books = book_models.get_all_books()
 
     if not books:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     # search book by id
     for i in range(len(books)):
@@ -124,8 +132,9 @@ def update_book_by_id(book: BaseBook, id: int = Path()):
             result = book_models.save_book(curr_book.model_dump())
 
             if not result:
-                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                                    'message': 'Error ocurred when updating the book'})
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail={'message': 'Error ocurred when updating the book'})
 
             return {'message': 'Book updated'}
 
@@ -140,20 +149,23 @@ def delete_book_by_id(id: int = Path()):
     book_by_id = book_models.get_book_by_id(id)
 
     if not book_by_id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={
-            'message': 'Book not found'})
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={'message': 'Book not found'})
 
     # get books from database
     books = book_models.get_all_books()
 
     if not books:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     result = book_models.delete_book_by_id(id)
 
     if not result:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={
-                            'message': 'Server internal error'})
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
 
     return {'message': 'Book deleted'}

@@ -21,6 +21,3 @@ class BaseBook(BaseModel):
 
 class Book(BaseBook):
     id: int
-
-
-Books = list[Book]
