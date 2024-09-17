@@ -1,4 +1,6 @@
-# FastAPI
+# FastAPI Tutorial
+
+# Create a FastAPI Project
 
 ## Requirements
 
@@ -44,21 +46,52 @@ fastapi run app.py
 
 # HTTP Methods
 
-Entre los métodos HTTP más utilizados se encuentran:
+Among the most commonly used HTTP methods are:
 
-| **Método** |             **Explicación**             |
-| :--------- | :-------------------------------------: |
-| GET        |  Utilizado para la extración de datos   |
-| POST       | Utilizado para enviar datos al servidor |
-| PUT        |  Utilizado para actualizar un recurso   |
-| DELETE     |    Utilizado para borrar un recurso     |
+| **Method** |         **Explanation**         |
+| :--------- | :-----------------------------: |
+| GET        |      Used to retrieve data      |
+| POST       | Used to send data to the server |
+| PUT        |    Used to update a resource    |
+| DELETE     |    Used to delete a resource    |
 
-# Parámetros de URL
+## Get Method
 
-Los parametros de URL se utilizan para enviar ciertos datos a través de la URL para encontrar recursos basandonos en la localización.
+Used to obtain information from a REST API, we send a request to our application and it responds by delivering the requested resources.
 
-Por ejemplo: Quiero encontrar un libro con el **ID 3**, para esto necesito utilizar el método **GET** y enviarle el ID por URL quedando de la siguiente manera:
+For the **GET** method, there are two additional ways to extract data, which are:
+
+- URL Parameters
+- Query Parameters
+
+We will see these below.
+
+### URL Parameters
+
+URL parameters are used to send certain data through the URL to locate resources based on their location.
+
+For example: I want to find a book with **ID 3**, for this I need to use the **GET** method and send the ID via URL as follows:
 
 ```$
-http://localhost:8000/api/books/3 # siendo este último el ID del libro que quiero obtener
+[GET] http://localhost:8000/api/books/3 # with the last part being the ID of the book I want to obtain
 ```
+
+### Query Parameters
+
+Query parameters are a way to send multiple dynamic values via URL to perform more specific queries using the GET method.
+
+For example: Imagine we want to capture a book with the initials of The Lord Of The Rings, we would do the following:
+
+## POST Method
+
+Used to create a resource on the server, typically in our database. We send a body to our REST API, which usually looks like this:
+
+```$
+# JSON Format
+{
+    "technology": "FastAPI",
+    "year": 2018
+}
+```
+
+The server takes the data we sent, verifies it, and if it meets the validation standards, it is registered in a **database**.
