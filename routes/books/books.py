@@ -9,7 +9,7 @@ import routes.books.models as book_models
 router = APIRouter(prefix='/books', tags=['books'])
 
 
-@router.get('/')
+@router.get('/all')
 def get_books() -> list[Book]:
     """Get all books"""
 
@@ -22,31 +22,6 @@ def get_books() -> list[Book]:
             detail={'message': 'Server internal error'})
 
     return books
-
-
-@router.get('/search')
-def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query(default=1, ge=1), title: str = '') -> list[Book]:
-    """Get books by title, page and per page"""
-
-    # get books from database
-    books = book_models.get_all_books()
-
-    if not books:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail={'message': 'Server internal error'})
-
-    coincidences: list[Book] = []
-
-    for book in books:
-        if title.lower() in str(book.title).lower():
-            coincidences.append(Book(**book.model_dump()))
-
-    # filter by page and per page
-    limit = page * per_page
-    offset = limit - per_page
-
-    return books[offset:limit]
 
 
 @router.get('/{id}')
@@ -64,10 +39,35 @@ def get_book_by_id(id: int = Path()) -> Book:
     # search book by id
     for book in books:
         if book.id == id:
-            return Book(**book.model_dump())
+            return book
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND, detail='Book not found')
+
+
+@router.get('/')
+def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query(default=1, ge=1), title: str = '') -> list[Book]:
+    """Get books by title, page and per page"""
+
+    # get books from database
+    books = book_models.get_all_books()
+
+    if not books:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={'message': 'Server internal error'})
+
+    coincidences: list[Book] = []
+
+    for book in books:
+        if title.casefold() in str(book.title).casefold():
+            coincidences.append(book)
+
+    # filter by page and per page
+    limit = page * per_page
+    offset = limit - per_page
+
+    return books[offset:limit]
 
 
 @router.post('/')
