@@ -6,6 +6,9 @@ from schemas.books import BaseBook, Book
 # models
 import routes.books.models as book_models
 
+# utils
+from utils.logger import logger
+
 router = APIRouter(prefix='/books', tags=['books'])
 
 
@@ -46,7 +49,7 @@ def get_book_by_id(id: int = Path()) -> Book:
 
 
 @router.get('/')
-def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query(default=1, ge=1), title: str = '') -> list[Book]:
+def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query(default=3, ge=1), title: str = '', author: str = '') -> list[Book]:
     """Get books by title, page and per page"""
 
     # get books from database
@@ -59,15 +62,26 @@ def get_books_by_query(page: int = Query(default=1, ge=1), per_page: int = Query
 
     coincidences: list[Book] = []
 
-    for book in books:
-        if title.casefold() in str(book.title).casefold():
-            coincidences.append(book)
+    if title:
+        for book in books:
+            if str(book.title).casefold().startswith(title.casefold()):
+                coincidences.append(book)
+
+    if author:
+        for book in books:
+            if str(book.author).casefold().startswith(author.casefold()):
+
+                # check if the book is already in the list
+                if book in coincidences:
+                    continue
+
+                coincidences.append(book)
 
     # filter by page and per page
     limit = page * per_page
     offset = limit - per_page
 
-    return books[offset:limit]
+    return coincidences[offset:limit]
 
 
 @router.post('/')

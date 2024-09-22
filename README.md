@@ -66,6 +66,8 @@ For the **GET** method, there are two additional ways to extract data, which are
 
 We will see these below.
 
+> The **GET** method cannot have a body, unlike the **POST** and **PUT** methods that can have a body.
+
 ### URL Parameters
 
 URL parameters are used to send certain data through the URL to locate resources based on their location.
@@ -95,3 +97,26 @@ Used to create a resource on the server, typically in our database. We send a bo
 ```
 
 The server takes the data we sent, verifies it, and if it meets the validation standards, it is registered in a **database**.
+
+## PUT Method
+
+Utilizado para actualizar datos, o un recurso en el servidor. Imaginemos que queremos actualizar un producto que en base de datos se encuentra registrado de la siguiente manera:
+
+```$
+{
+    "name": "Coca-Cola",
+    "price": 2.00
+}
+```
+
+Ahora, queremos actualizar el precio, mediante el método PUT enviariamos la información de la siguiente manera:
+
+```$
+# JSON format
+{
+    "name": "Coca-Cola",
+    "price": 5.00
+}
+```
+
+Por lo que en nuestra base de datos se actualizarian los datos por los que estamos enviando.
