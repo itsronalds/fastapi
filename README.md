@@ -100,7 +100,7 @@ The server takes the data we sent, verifies it, and if it meets the validation s
 
 ## PUT Method
 
-Utilizado para actualizar datos, o un recurso en el servidor. Imaginemos que queremos actualizar un producto que en base de datos se encuentra registrado de la siguiente manera:
+Used to update data, or a resource on the server. Let's imagine that we want to update a product that is registered in the database as follows:
 
 ```$
 {
@@ -109,7 +109,7 @@ Utilizado para actualizar datos, o un recurso en el servidor. Imaginemos que que
 }
 ```
 
-Ahora, queremos actualizar el precio, mediante el método PUT enviariamos la información de la siguiente manera:
+Now, we want to update the price, using the PUT method we would send the information as follows:
 
 ```$
 # JSON format
@@ -119,4 +119,4 @@ Ahora, queremos actualizar el precio, mediante el método PUT enviariamos la inf
 }
 ```
 
-Por lo que en nuestra base de datos se actualizarian los datos por los que estamos enviando.
+So our database will be updated with the data we are sending.
